@@ -411,7 +411,6 @@ PASSWORD_ERROR_MESSAGE = """
 <b>Example:</b> link::my password
 """
 
-
 def get_bot_commands():
     from ...core.plugin_manager import get_plugin_manager
 
@@ -429,11 +428,14 @@ def get_bot_commands():
         "Count": "[link] Count no. of files/folders in GDrive",
         "List": "[query] Search any Text which is available in GDrive",
         "Search": "[query] Search torrents via Qbit Plugins",
+        "MediaInfo": "[reply/link] Get MediaInfo of the Target Media",
         "Select": "[gid/reply] Select files for NZB, Aria2, Qbit Tasks",
         "Ping": "Ping Bot to test Response Speed",
+        "SpeedTest": "Check Bot Speed using Speedtest.net",
         "Status": "[id/me] Tasks Status of Bot",
         "Stats": "Bot, OS, Repo & System full Statistics",
         "Rss": "User RSS Management Settings",
+        "IMDB": "[query] or ttxxxxxx Get IMDB info",
         "CancelAll": "Cancel all Tasks on the Bot",
         "Help": "Detailed help usage of the WZ Bot",
         "BotSet": "[SUDO] Bot Management Settings",
@@ -441,6 +443,7 @@ def get_bot_commands():
         "Memory": "[SUDO] Memory usage, caches and an allocation profiler",
         "Restart": "[SUDO] Reboot bot",
         "RestartSessions": "[SUDO] Reboot User Sessions",
+        "GenPyroSess": "[SUDO] Generate Pyrogram String Session",
     }
 
     commands = static_commands.copy()
@@ -450,6 +453,10 @@ def get_bot_commands():
         for plugin_info in plugin_manager.list_plugins():
             if plugin_info.enabled and plugin_info.commands:
                 for cmd in plugin_info.commands:
+                    if cmd == "speedtest":
+                        commands["SpeedTest"] = "Check Bot Speed using Speedtest.net"
+                        continue
+                        
                     key = cmd.capitalize()
                     if key not in commands:
                         commands[key] = (
@@ -460,7 +467,6 @@ def get_bot_commands():
 
 
 BOT_COMMANDS = get_bot_commands()
-
 
 def get_help_string():
     from ..telegram_helper.bot_commands import BotCommands
@@ -479,7 +485,9 @@ def get_help_string():
         else:
             cmd_str = f"/{cmd_attr}"
 
-        if key == "Mirror":
+        if key == "SpeedTest" and key in BOT_COMMANDS:
+            help_lines.append(f"{cmd_str}: Check Bot Speed using Speedtest.net")
+        elif key == "Mirror":
             help_lines.append(f"{cmd_str}: Start mirroring to cloud.")
         elif key == "QbMirror":
             help_lines.append(f"{cmd_str}: Start Mirroring to cloud using qBittorrent.")
@@ -533,6 +541,8 @@ def get_help_string():
             help_lines.append(f"{cmd_str} [query]: Search in Google Drive(s).")
         elif key == "Search":
             help_lines.append(f"{cmd_str} [query]: Search for torrents with API.")
+        elif key == "MediaInfo":
+            help_lines.append(f"{cmd_str} [query]: Get media info.")
         elif key == "Status":
             help_lines.append(f"{cmd_str}: Shows a status of all the downloads.")
         elif key == "Stats":
@@ -591,6 +601,10 @@ def get_help_string():
             )
         elif key == "Rss":
             help_lines.append(f"/{BotCommands.RssCommand}: RSS Menu.")
+        elif key == "GenPyroSess":
+            help_lines.append(
+                f"/{BotCommands.GenPyroSessCommand}: Generate Pyrogram String Session (Only Owner & Sudo)."
+            )
         elif key in BOT_COMMANDS:
             help_lines.append(f"{cmd_str}: {BOT_COMMANDS[key]}")
 
