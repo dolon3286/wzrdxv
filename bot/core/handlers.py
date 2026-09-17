@@ -312,16 +312,6 @@ async def add_handlers():
     )
     TgClient.bot.add_handler(
         MessageHandler(
-            imdb_search,
-            filters=command(BotCommands.IMDBCommand, case_sensitive=True)
-            & CustomFilters.authorized,
-        )
-    )
-    TgClient.bot.add_handler(
-        CallbackQueryHandler(imdb_callback, filters=regex("^imdb"))
-    )
-    TgClient.bot.add_handler(
-        MessageHandler(
             ping,
             filters=command(BotCommands.PingCommand, case_sensitive=True)
             & CustomFilters.authorized,
@@ -377,7 +367,7 @@ async def add_handlers():
         MessageHandler(
             bot_stats,
             filters=command(BotCommands.StatsCommand, case_sensitive=True)
-            & CustomFilters.authorized,
+            & CustomFilters.sudo,
         )
     )
     TgClient.bot.add_handler(
@@ -391,7 +381,7 @@ async def add_handlers():
         CallbackQueryHandler(status_pages, filters=regex("^status"))
     )
     TgClient.bot.add_handler(
-        CallbackQueryHandler(stats_pages, filters=regex("^stats"))
+        CallbackQueryHandler(stats_pages, filters=regex("^stats") & CustomFilters.sudo)
     )
     TgClient.bot.add_handler(CallbackQueryHandler(log_cb, filters=regex("^log")))
     TgClient.bot.add_handler(CallbackQueryHandler(start_cb, filters=regex("^start")))
@@ -453,8 +443,7 @@ async def add_handlers():
     TgClient.bot.add_handler(
         MessageHandler(
             change_category,
-            filters=command(BotCommands.CategorySelectCommand)
-            & CustomFilters.authorized,
+            filters=command(BotCommands.CategorySelectCommand) & CustomFilters.authorized,
         )
     )
     TgClient.bot.add_handler(
