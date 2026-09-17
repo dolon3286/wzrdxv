@@ -31,6 +31,7 @@ class BotCommands:
         "Status": ["status", "s", "statusall"],
         "Stream": ["stream", "sl"],
         "Ping": "ping",
+        "SpeedTest": ["speedtest", "stest"],
         "Restart": ["restart", "r", "restartall"],
         "RestartSessions": ["restartses", "rses"],
         "Broadcast": ["broadcast", "bc"],
