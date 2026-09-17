@@ -24,7 +24,12 @@ async def speedtest(_, message):
             "<b>ERROR:</b> <i>Can't connect to Server at the Moment, Try Again Later !</i>",
         )
         return
-    speed_results.results.share()
+        
+    try:
+        await sync_to_async(speed_results.results.share)
+    except Exception as e:
+        LOGGER.warning(f"Speedtest share image generation failed: {e}")
+
     result = speed_results.results.dict()
     string_speed = f"""
 ➲ <b><i>SPEEDTEST INFO</i></b>
@@ -44,7 +49,10 @@ async def speedtest(_, message):
 ┖ <b>Longitude:</b> <code>{result['server']['lon']}</code>
 """
     try:
-        await send_message(message, string_speed, photo=result["share"])
+        if result.get("share"):
+            await send_message(message, string_speed, photo=result["share"])
+        else:
+            await send_message(message, string_speed)
         await delete_message(speed)
     except Exception as e:
         LOGGER.error(str(e))
