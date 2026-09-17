@@ -319,13 +319,6 @@ async def add_handlers():
     )
     TgClient.bot.add_handler(
         MessageHandler(
-            speedtest,
-            filters=command(BotCommands.SpeedTestCommand, case_sensitive=True)
-            & CustomFilters.sudo,
-        )
-    )
-    TgClient.bot.add_handler(
-        MessageHandler(
             bot_help,
             filters=command(BotCommands.HelpCommand, case_sensitive=True)
             & CustomFilters.authorized,
@@ -335,13 +328,6 @@ async def add_handlers():
         MessageHandler(
             stream_links,
             filters=command(BotCommands.StreamCommand, case_sensitive=True)
-            & CustomFilters.authorized,
-        )
-    )
-    TgClient.bot.add_handler(
-        MessageHandler(
-            mediainfo,
-            filters=command(BotCommands.MediaInfoCommand, case_sensitive=True)
             & CustomFilters.authorized,
         )
     )
@@ -367,7 +353,7 @@ async def add_handlers():
         MessageHandler(
             bot_stats,
             filters=command(BotCommands.StatsCommand, case_sensitive=True)
-            & CustomFilters.sudo,
+            & CustomFilters.authorized,
         )
     )
     TgClient.bot.add_handler(
@@ -380,9 +366,7 @@ async def add_handlers():
     TgClient.bot.add_handler(
         CallbackQueryHandler(status_pages, filters=regex("^status"))
     )
-    TgClient.bot.add_handler(
-        CallbackQueryHandler(stats_pages, filters=regex("^stats") & CustomFilters.sudo)
-    )
+    TgClient.bot.add_handler(CallbackQueryHandler(stats_pages, filters=regex("^stats")))
     TgClient.bot.add_handler(CallbackQueryHandler(log_cb, filters=regex("^log")))
     TgClient.bot.add_handler(CallbackQueryHandler(start_cb, filters=regex("^start")))
     TgClient.bot.add_handler(
@@ -428,22 +412,9 @@ async def add_handlers():
     )
     TgClient.bot.add_handler(
         MessageHandler(
-            hydra_search,
-            filters=command(BotCommands.NzbSearchCommand, case_sensitive=True)
-            & CustomFilters.authorized,
-        )
-    )
-    TgClient.bot.add_handler(
-        MessageHandler(
-            gen_pyro_string,
-            filters=command(BotCommands.GenPyroSessCommand, case_sensitive=True)
-            & CustomFilters.sudo,
-        )
-    )
-    TgClient.bot.add_handler(
-        MessageHandler(
             change_category,
-            filters=command(BotCommands.CategorySelectCommand) & CustomFilters.authorized,
+            filters=command(BotCommands.CategorySelectCommand)
+            & CustomFilters.authorized,
         )
     )
     TgClient.bot.add_handler(
